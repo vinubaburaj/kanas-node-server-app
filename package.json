@@ -1,0 +1,25 @@
+{
+  "name": "kanbas-node-server-app",
+  "version": "1.0.0",
+  "description": "Node.js HTTP web server for Kanbas application",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vinubaburaj/kanas-node-server-app.git"
+  },
+  "keywords": [
+    "Node",
+    "REST",
+    "Server",
+    "HTTP"
+  ],
+  "author": "Vinu Baburaj",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vinubaburaj/kanas-node-server-app/issues"
+  },
+  "homepage": "https://github.com/vinubaburaj/kanas-node-server-app#readme"
+}
