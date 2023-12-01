@@ -41,11 +41,12 @@ function UserRoutes(app) {
                 const status = await dao.updateUser(userId, req.body);
 
                 // If the currentUser(ADMIN) is updating their own info
-                if(user._id === currentUser._id){
+                if(userId === currentUser._id){
+
                     // Updating the session value of the current user
                     req.session['currentUser'] = await dao.findUserById(userId);
-                }
 
+                }
                 res.json(status);
             }
             else{
