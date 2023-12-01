@@ -27,16 +27,23 @@ function UserRoutes(app) {
         res.json(user);
     };
     const updateUser = async (req, res) => {
-        const userId = req.params.userId;
-        const status = await dao.updateUser(userId, req.body);
-        const currentUser = await dao.findUserById(userId);
-        if(!currentUser) {
-            res.status(400).json(
-                { message: "User does not exist!" });
-            return;
+        try {
+            const userId = req.params.userId;
+            const status = await dao.updateUser(userId, req.body);
+            const currentUser = await dao.findUserById(userId);
+            if (!currentUser) {
+                res.status(400).json(
+                    {message: "User does not exist!"});
+                return;
+            }
+            req.session['currentUser'] = currentUser;
+            res.json(status);
         }
-        req.session['currentUser'] = currentUser;
-        res.json(status);
+        catch(error){
+            res.status(400).json({
+                message: "Error updating user info"
+            });
+        }
     };
     const signup = async (req, res) => {
         const user = await dao.findUserByUsername(req.body.username);
@@ -52,6 +59,10 @@ function UserRoutes(app) {
     const signin = async (req, res) => {
         const { username, password } = req.body;
         const currentUser = await dao.findUserByCredentials(username, password);
+        if(!currentUser){
+            res.status(400).json({message:"Invalid credentials"});
+            return;
+        }
         req.session['currentUser'] = currentUser;
         res.json(currentUser);
     };
