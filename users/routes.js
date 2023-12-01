@@ -29,15 +29,31 @@ function UserRoutes(app) {
     const updateUser = async (req, res) => {
         try {
             const userId = req.params.userId;
-            const status = await dao.updateUser(userId, req.body);
-            const currentUser = await dao.findUserById(userId);
-            if (!currentUser) {
-                res.status(400).json(
-                    {message: "User does not exist!"});
-                return;
+
+            // User whose value is to be updated
+            const user = await dao.findUserById(userId);
+
+            // Current user who is logged in the session
+            const currentUser = req.session['currentUser'];
+
+            // If user exists in the DB
+            if(user){
+                const status = await dao.updateUser(userId, req.body);
+
+                // If the currentUser(ADMIN) is updating their own info
+                if(user._id === currentUser._id){
+                    // Updating the session value of the current user
+                    req.session['currentUser'] = await dao.findUserById(userId);
+                }
+
+                res.json(status);
             }
-            req.session['currentUser'] = currentUser;
-            res.json(status);
+            else{
+                res.status(400).json({
+                    message: "User does not exist"
+                })
+            }
+
         }
         catch(error){
             res.status(400).json({
